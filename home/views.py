@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views.generic import View
+from django.contrib.auth.models import User
+from django.contrib import messages
 from .models import *
 
 
@@ -52,3 +54,48 @@ class SearchView(BaseView):
             return redirect('/')
 
         return render(request, 'search-list.html', self.view)
+
+
+def signup(request):
+    if request.method == 'POST':
+        first_name = request.POST['first_name']
+        last_name = request.POST['last_name']
+        email = request.POST['email']
+        username = request.POST['username']
+        password = request.POST['password']
+        re_password = request.POST['re_password']
+
+        if password == re_password:
+            for character in first_name:
+                if character.isdigit():
+                    messages.error(request, 'Name cannot have number!!')
+                    return redirect("home:signup")
+            for character in last_name:
+                if character.isdigit():
+                    messages.error(request, 'Name cannot have number!!')
+                    return redirect("home:signup")
+            if len(password) < 8:
+                messages.error(request, 'Password length must exceed 8 characters!!')
+                return redirect("home:signup")
+            elif User.objects.filter(username=username).exists():
+                messages.error(request, 'Username already exists!!')
+                return redirect('home:signup')
+            elif User.objects.filter(email=email).exists():
+                messages.error(request, 'Email already registered!!')
+                return redirect('home:signup')
+            else:
+                user = User.objects.create_user(
+                    first_name=first_name,
+                    last_name=last_name,
+                    email=email,
+                    username=username,
+                    password=password
+                )
+                user.save()
+
+                messages.success(request, 'Account created successfully!!')
+                return redirect('home:signup')
+        else:
+            messages.error(request, 'Password does not match!!')
+
+    return render(request, 'login.html')
