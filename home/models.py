@@ -36,6 +36,9 @@ class Item(models.Model):
     def get_item_slug(self):
         return reverse('home:product', kwargs={'slug': self.slug})
 
+    def get_cart_slug(self):
+        return reverse('home:add-to-cart', kwargs={'slug': self.slug})
+
 
 class Slider(models.Model):
     name = models.CharField(max_length=100)
@@ -74,3 +77,14 @@ class Contact(models.Model):
 
     def __str__(self):
         return self.subject
+
+
+class Cart(models.Model):
+    item = models.ForeignKey(Item, on_delete=models.CASCADE, null=True)
+    slug = models.CharField(max_length=250)
+    quantity = models.IntegerField(default=1)
+    user = models.CharField(max_length=200)
+    date = models.DateTimeField(null=True)
+
+    def __str__(self):
+        return self.user

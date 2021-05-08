@@ -115,3 +115,36 @@ def login(request):
             return redirect('home:login')
 
     return render(request, 'login.html')
+
+
+class CartView(BaseView):
+    def get(self, request):
+        self.view['cart_items'] = Cart.objects.filter(user=request.user.username)
+        return render(request, 'cart.html', self.view)
+
+
+def add_to_cart(request, slug):
+    if Cart.objects.filter(slug=slug, user=request.user.username).exists():
+        quantity = Cart.objects.get(slug=slug, user=request.user.username).quantity
+        quantity += 1
+        Cart.objects.filter(slug=slug, user=request.user.username).update(quantity=quantity)
+
+    else:
+        username = request.user.username
+
+        data = Cart.objects.create(
+            user=username,
+            slug=slug,
+            item=Item.objects.filter(slug=slug)[0],
+        )
+        data.save()
+
+    return redirect('home:cart')
+
+
+def delete_cart(request, slug):
+    if Cart.objects.filter(slug=slug, user=request.user.username).exists():
+        Cart.objects.filter(slug=slug, user=request.user.username).delete()
+        messages.success(request, 'Product removed from cart!!')
+
+    return redirect('home:cart')

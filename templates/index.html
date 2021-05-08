@@ -197,7 +197,7 @@
                                     <img src="{{item.image.url}}" style="width:300px; height:300px" alt="Product Image">
                                 </a>
                                 <div class="product-action">
-                                    <a href="#"><i class="fa fa-cart-plus"></i></a>
+                                    <a href="{{item.get_cart_slug}}"><i class="fa fa-cart-plus"></i></a>
                                     <a href="#"><i class="fa fa-heart"></i></a>
                                     <a href="#"><i class="fa fa-search"></i></a>
                                 </div>
@@ -208,7 +208,7 @@
                                 {% else %}
                                 <h3><span>Rs. </span>{{item.price}}</h3>
                                 {% endif %}
-                                <a class="btn" href=""><i class="fa fa-shopping-cart"></i>Buy Now</a>
+                                <a class="btn" href="{{item.get_cart_slug}}"><i class="fa fa-shopping-cart"></i>Buy Now</a>
                             </div>
                         </div></a>
                     </div>
@@ -243,7 +243,7 @@
                                     <img src="{{item.image.url}}" style="width:300px; height:300px" alt="Product Image">
                                 </a>
                                 <div class="product-action">
-                                    <a href="#"><i class="fa fa-cart-plus"></i></a>
+                                    <a href="{{item.get_cart_slug}}"><i class="fa fa-cart-plus"></i></a>
                                     <a href="#"><i class="fa fa-heart"></i></a>
                                     <a href="#"><i class="fa fa-search"></i></a>
                                 </div>
@@ -254,7 +254,7 @@
                                 {% else %}
                                 <h3><span>Rs. </span>{{item.price}}</h3>
                                 {% endif %}
-                                <a class="btn" href=""><i class="fa fa-shopping-cart"></i>Buy Now</a>
+                                <a class="btn" href="{{item.get_cart_slug}}"><i class="fa fa-shopping-cart"></i>Buy Now</a>
                             </div>
                         </div>
                     </div>
