@@ -85,6 +85,16 @@ class Cart(models.Model):
     quantity = models.IntegerField(default=1)
     user = models.CharField(max_length=200)
     date = models.DateTimeField(null=True)
+    total = models.IntegerField()
+
+    def delete_cart_slug(self):
+        return reverse('home:delete-cart', kwargs={'slug': self.slug})
+
+    def add_single_item_cart_slug(self):
+        return reverse('home:add-single-item-cart', kwargs={'slug': self.slug})
+
+    def remove_single_item_cart_slug(self):
+        return reverse('home:remove-single-item-cart', kwargs={'slug': self.slug})
 
     def __str__(self):
         return self.user

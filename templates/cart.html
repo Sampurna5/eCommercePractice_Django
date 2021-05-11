@@ -47,13 +47,13 @@
                                             {% endif %}
                                             <td>
                                                 <div class="qty">
-                                                    <button class="btn-minus"><i class="fa fa-minus"></i></button>
+                                                    <a href="{{product.remove_single_item_cart_slug}}"><button class="btn-minus"><i class="fa fa-minus"></i></button></a>
                                                     <input type="text" value="{{product.quantity}}">
-                                                    <button class="btn-plus"><i class="fa fa-plus"></i></button>
+                                                    <a href="{{product.add_single_item_cart_slug}}"><button class="btn-plus"><i class="fa fa-plus"></i></button></a>
                                                 </div>
                                             </td>
-                                            <td>$99</td>
-                                            <td><button><i class="fa fa-trash"></i></button></td>
+                                            <td>Rs. {{product.total}}</td>
+                                            <td><a href="{{product.delete_cart_slug}}"><button><i class="fa fa-trash"></i></button></a></td>
                                         </tr>
                                         {% endfor %}
                                     </tbody>

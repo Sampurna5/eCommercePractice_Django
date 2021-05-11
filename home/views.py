@@ -127,15 +127,29 @@ def add_to_cart(request, slug):
     if Cart.objects.filter(slug=slug, user=request.user.username).exists():
         quantity = Cart.objects.get(slug=slug, user=request.user.username).quantity
         quantity += 1
-        Cart.objects.filter(slug=slug, user=request.user.username).update(quantity=quantity)
+
+        if Item.objects.get(slug=slug).discounted_price > 0:
+            product_price = Item.objects.get(slug=slug).discounted_price
+            product_total = quantity * product_price
+        else:
+            product_price = Item.objects.get(slug=slug).price
+            product_total = quantity * product_price
+
+        Cart.objects.filter(slug=slug, user=request.user.username).update(quantity=quantity, total=product_total)
 
     else:
         username = request.user.username
+
+        if Item.objects.get(slug=slug).discounted_price > 0:
+            product_total = Item.objects.get(slug=slug).discounted_price
+        else:
+            product_total = Item.objects.get(slug=slug).price
 
         data = Cart.objects.create(
             user=username,
             slug=slug,
             item=Item.objects.filter(slug=slug)[0],
+            total=product_total
         )
         data.save()
 
@@ -148,3 +162,41 @@ def delete_cart(request, slug):
         messages.success(request, 'Product removed from cart!!')
 
     return redirect('home:cart')
+
+
+def add_single_item_cart(request, slug):
+    if Cart.objects.filter(slug=slug, user=request.user.username).exists():
+        quantity = Cart.objects.get(slug=slug, user=request.user.username).quantity
+        quantity += 1
+
+        if Item.objects.get(slug=slug).discounted_price > 0:
+            product_price = Item.objects.get(slug=slug).discounted_price
+            product_total = quantity * product_price
+        else:
+            product_price = Item.objects.get(slug=slug).price
+            product_total = quantity * product_price
+
+        Cart.objects.filter(slug=slug, user=request.user.username).update(quantity=quantity, total=product_total)
+
+    return redirect('home:cart')
+
+
+def remove_single_item_cart(request, slug):
+    if Cart.objects.filter(slug=slug, user=request.user.username).exists():
+        quantity = Cart.objects.get(slug=slug, user=request.user.username).quantity
+        quantity -= 1
+        if quantity == 0:
+            Cart.objects.filter(slug=slug, user=request.user.username).delete()
+
+        if Item.objects.get(slug=slug).discounted_price > 0:
+            product_price = Item.objects.get(slug=slug).discounted_price
+            product_total = quantity * product_price
+        else:
+            product_price = Item.objects.get(slug=slug).price
+            product_total = quantity * product_price
+
+        Cart.objects.filter(slug=slug, user=request.user.username).update(quantity=quantity, total=product_total)
+
+    return redirect('home:cart')
+
+
