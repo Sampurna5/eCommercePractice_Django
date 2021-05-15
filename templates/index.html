@@ -198,9 +198,8 @@
                                 </a>
                                 <div class="product-action">
                                     <a href="{{item.get_cart_slug}}"><i class="fa fa-cart-plus"></i></a>
-                                    <a href="#"><i class="fa fa-heart"></i></a>
-                                    <a href="#"><i class="fa fa-search"></i></a>
-                                </div>
+                                    <a href="{{item.get_wishlist_slug}}"><i class="fa fa-heart"></i></a>
+                               </div>
                             </div>
                             <div class="product-price">
                                 {% if item.discounted_price > 0 %}
@@ -244,8 +243,7 @@
                                 </a>
                                 <div class="product-action">
                                     <a href="{{item.get_cart_slug}}"><i class="fa fa-cart-plus"></i></a>
-                                    <a href="#"><i class="fa fa-heart"></i></a>
-                                    <a href="#"><i class="fa fa-search"></i></a>
+                                    <a href="{{item.get_wishlist_slug}}"><i class="fa fa-heart"></i></a>
                                 </div>
                             </div>
                             <div class="product-price">

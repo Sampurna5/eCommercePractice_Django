@@ -39,6 +39,9 @@ class Item(models.Model):
     def get_cart_slug(self):
         return reverse('home:add-to-cart', kwargs={'slug': self.slug})
 
+    def get_wishlist_slug(self):
+        return reverse('home:add-to-wishlist', kwargs={'slug': self.slug})
+
 
 class Slider(models.Model):
     name = models.CharField(max_length=100)
@@ -98,3 +101,14 @@ class Cart(models.Model):
 
     def __str__(self):
         return self.user
+
+
+class Wishlist(models.Model):
+    item = models.ForeignKey(Item, on_delete=models.CASCADE, null=True)
+    slug = models.CharField(max_length=250)
+    user = models.CharField(max_length=200)
+
+    def delete_wishlist_slug(self):
+        return reverse('home:delete-wishlist-item', kwargs={'slug': self.slug})
+
+

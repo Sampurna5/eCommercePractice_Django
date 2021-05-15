@@ -146,9 +146,9 @@ def add_to_cart(request, slug):
             product_total = Item.objects.get(slug=slug).price
 
         data = Cart.objects.create(
-            user=username,
-            slug=slug,
             item=Item.objects.filter(slug=slug)[0],
+            slug=slug,
+            user=username,
             total=product_total
         )
         data.save()
@@ -200,3 +200,32 @@ def remove_single_item_cart(request, slug):
     return redirect('home:cart')
 
 
+class WishlistView(BaseView):
+    def get(self, request):
+        self.view['wishlist_items'] = Wishlist.objects.filter(user=request.user.username)
+        return render(request, 'wishlist.html', self.view)
+
+
+def add_to_wishlist(request, slug):
+    if Wishlist.objects.filter(slug=slug, user=request.user.username).exists():
+        return redirect('home:wishlist')
+
+    else:
+        username = request.user.username
+
+        data = Wishlist.objects.create(
+            item=Item.objects.filter(slug=slug)[0],
+            slug=slug,
+            user=username,
+        )
+        data.save()
+
+    return redirect('home:wishlist')
+
+
+def delete_wishlist_item(request, slug):
+    if Wishlist.objects.filter(slug=slug, user=request.user.username).exists():
+        Wishlist.objects.filter(slug=slug, user=request.user.username).delete()
+        messages.success(request, 'Product removed from wishlist!!')
+
+    return redirect('home:wishlist')
